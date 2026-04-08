@@ -1,0 +1,14 @@
+{
+  "buildCommand": "",
+  "outputDirectory": "public",
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "@vercel/node@4",
+      "includeFiles": "src/data/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/chat", "destination": "/api/chat" },
+    { "source": "/api/reset", "destination": "/api/reset" }
+  ]
+}
