@@ -1,38 +1,33 @@
-'use client';
-
-import { useParams, notFound } from 'next/navigation';
-import { getDocPage } from '@/content';
+import { notFound } from 'next/navigation';
+import { getDocPage, getAllSlugs } from '@/content';
 import { findNavItem, getPrevNext } from '@/lib/navigation';
-import { TableOfContents } from '@/components/toc';
+import { ClientToc } from './client-toc';
 import { PrevNext } from '@/components/prev-next';
 
-export default function DocPage() {
-  const params = useParams();
-  const slugArray = params.slug as string[];
+export function generateStaticParams() {
+  return getAllSlugs().map((slug) => ({ slug: slug.split('/') }));
+}
+
+export default async function DocPage({ params }: { params: Promise<{ slug: string[] }> }) {
+  const { slug: slugArray } = await params;
   const slug = slugArray.join('/');
 
   const page = getDocPage(slug);
+  if (!page) notFound();
+
   const navInfo = findNavItem(slug);
   const { prev, next } = getPrevNext(slug);
-
-  if (!page) {
-    notFound();
-  }
-
   const Content = page.content;
 
   return (
     <div className="lg:grid lg:grid-cols-[1fr_200px] lg:gap-8 xl:grid-cols-[1fr_220px]">
-      {/* Content */}
       <article className="docs-content animate-fade-in-up py-8 pb-24">
-        {/* Breadcrumb */}
         {navInfo && (
           <p className="mb-4 text-sm font-semibold text-primary-600 dark:text-primary-400">
             {navInfo.section.title}
           </p>
         )}
 
-        {/* Title */}
         <h1 className="text-[clamp(1.75rem,4vw,2.25rem)] font-bold leading-tight tracking-tight text-[var(--text-highlighted)]">
           {page.title}
         </h1>
@@ -42,17 +37,14 @@ export default function DocPage() {
 
         <hr />
 
-        {/* Page content */}
         <Content />
 
-        {/* Prev/Next */}
         <PrevNext prev={prev} next={next} />
       </article>
 
-      {/* TOC rail */}
       <aside className="hidden lg:block">
         <div className="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto">
-          <TableOfContents headings={page.headings} />
+          <ClientToc headings={page.headings} />
         </div>
       </aside>
     </div>
