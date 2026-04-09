@@ -1,13 +1,5 @@
 {
-  "buildCommand": "",
-  "outputDirectory": "public",
-  "functions": {
-    "api/**/*.ts": {
-      "includeFiles": "src/data/**"
-    }
-  },
-  "rewrites": [
-    { "source": "/api/chat", "destination": "/api/chat" },
-    { "source": "/api/reset", "destination": "/api/reset" }
-  ]
+  "framework": "nextjs",
+  "buildCommand": "next build",
+  "outputDirectory": ".next"
 }

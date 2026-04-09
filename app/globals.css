@@ -1,0 +1,224 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+
+  --color-primary-50: oklch(97.9% 0.021 166.113);
+  --color-primary-100: oklch(95.0% 0.052 163.051);
+  --color-primary-200: oklch(90.5% 0.093 164.15);
+  --color-primary-300: oklch(84.5% 0.143 164.978);
+  --color-primary-400: oklch(76.5% 0.177 163.223);
+  --color-primary-500: oklch(69.6% 0.17 162.48);
+  --color-primary-600: oklch(59.6% 0.145 163.225);
+  --color-primary-700: oklch(50.8% 0.118 165.612);
+  --color-primary-800: oklch(43.2% 0.095 166.913);
+  --color-primary-900: oklch(37.8% 0.077 168.94);
+  --color-primary-950: oklch(26.2% 0.051 172.552);
+}
+
+:root {
+  --header-height: 4rem;
+  --bg: #ffffff;
+  --bg-elevated: #f8fafc;
+  --bg-muted: #f1f5f9;
+  --text-highlighted: #0f172a;
+  --text-default: #1e293b;
+  --text-muted: #64748b;
+  --text-dimmed: #94a3b8;
+  --border: #e2e8f0;
+  --border-accent: #cbd5e1;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-height: 4rem;
+  }
+}
+
+.dark {
+  --bg: #0b1120;
+  --bg-elevated: #151e31;
+  --bg-muted: #1e293b;
+  --text-highlighted: #f1f5f9;
+  --text-default: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dimmed: #64748b;
+  --border: #1e293b;
+  --border-accent: #334155;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-height) + 2rem);
+  font-size: clamp(15px, 0.9rem + 0.15vw, 16px);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-default);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: oklch(69.6% 0.17 162.48 / 0.2);
+}
+
+.dark ::selection {
+  background-color: oklch(76.5% 0.177 163.223 / 0.25);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-accent);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dimmed);
+}
+
+/* Prose styling for docs content */
+.docs-content h2 {
+  font-size: clamp(1.35rem, 1.2rem + 0.75vw, 1.5rem);
+  font-weight: 700;
+  color: var(--text-highlighted);
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+  scroll-margin-top: calc(var(--header-height) + 3rem);
+  letter-spacing: -0.02em;
+}
+
+.docs-content h3 {
+  font-size: clamp(1.15rem, 1rem + 0.5vw, 1.25rem);
+  font-weight: 600;
+  color: var(--text-highlighted);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  scroll-margin-top: calc(var(--header-height) + 3rem);
+}
+
+.docs-content p {
+  margin: 1.25rem 0;
+  line-height: 1.8;
+  color: var(--text-default);
+}
+
+.docs-content ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 1.25rem 0;
+}
+
+.docs-content ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 1.25rem 0;
+}
+
+.docs-content li {
+  margin: 0.375rem 0;
+  padding-left: 0.375rem;
+  line-height: 1.75;
+}
+
+.docs-content li::marker {
+  color: var(--border-accent);
+}
+
+.docs-content a {
+  color: oklch(69.6% 0.17 162.48);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.docs-content a:hover {
+  border-bottom-color: oklch(69.6% 0.17 162.48);
+}
+
+.docs-content strong {
+  font-weight: 600;
+  color: var(--text-highlighted);
+}
+
+.docs-content hr {
+  border: none;
+  border-top: 1px dashed var(--border);
+  margin: 2.5rem 0;
+}
+
+.docs-content > *:first-child {
+  margin-top: 0;
+}
+
+/* CSS Keyframe animations (work without JS, unlike framer-motion) */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+.animate-fade-in-up-delay {
+  animation: fade-in-up 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) 0.15s both;
+}
+
+/* Thinking block — simple backdrop blur */
+.liquid-glass {
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: var(--bg-muted);
+  border: 1px solid var(--border);
+}
+
+
+/* Thinking animations */
+@keyframes thinking-shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes thinking-sparkle {
+  0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  50% { opacity: 0.6; transform: scale(0.85) rotate(90deg); }
+}
+
+.thinking-shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--text-highlighted) 0%,
+    var(--text-dimmed) 40%,
+    var(--text-highlighted) 60%,
+    var(--text-dimmed) 80%,
+    var(--text-highlighted) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: thinking-shimmer 2s linear infinite;
+}
+
+.thinking-sparkle {
+  animation: thinking-sparkle 2s ease-in-out infinite;
+}
+
+/* Hide scrollbar for quick-action chips */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
