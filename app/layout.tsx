@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
-import { ChatWidget } from '@/components/chat-widget';
+import { ChatLoader } from '@/components/chat-loader';
 import './globals.css';
 
 const inter = Inter({
@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
-          <ChatWidget />
+          <ChatLoader />
         </ThemeProvider>
       </body>
     </html>
