@@ -3,7 +3,6 @@
   "outputDirectory": "public",
   "functions": {
     "api/**/*.ts": {
-      "runtime": "@vercel/node@4",
       "includeFiles": "src/data/**"
     }
   },
