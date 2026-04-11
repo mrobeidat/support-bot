@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Send, Sparkles } from 'lucide-react';
+import { MessageSquare, X, Send, Sparkles, Maximize2, Minimize2 } from 'lucide-react';
 import { ThinkingBlock, type ThinkingStep, type ThinkingSource } from './thinking-block';
 
 interface ChatMessage {
@@ -143,6 +143,7 @@ function InlineFormat({ text }: { text: string }) {
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'assistant',
@@ -339,13 +340,14 @@ export function ChatWidget() {
             transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
             style={{ transformOrigin: 'bottom right' }}
             className={
-              'fixed z-[60] flex flex-col overflow-hidden ' +
-              'inset-0 bg-[var(--bg)] ' +
-              'sm:inset-auto sm:bottom-5 sm:right-5 sm:h-[min(600px,calc(100vh-2.5rem))] sm:w-[420px] sm:rounded-2xl sm:border sm:border-[var(--border)] sm:bg-[var(--bg)]/95 sm:backdrop-blur-xl sm:shadow-2xl'
+              'fixed z-[60] flex flex-col overflow-hidden transition-all duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] ' +
+              (expanded
+                ? 'inset-0 bg-[var(--bg)] sm:inset-4 sm:rounded-2xl sm:border sm:border-[var(--border)] sm:bg-[var(--bg)]/95 sm:backdrop-blur-xl sm:shadow-2xl'
+                : 'inset-0 bg-[var(--bg)] sm:inset-auto sm:bottom-5 sm:right-5 sm:h-[min(600px,calc(100vh-2.5rem))] sm:w-[420px] sm:rounded-2xl sm:border sm:border-[var(--border)] sm:bg-[var(--bg)]/95 sm:backdrop-blur-xl sm:shadow-2xl')
             }
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-white/10 bg-primary-500 px-4 py-3.5 sm:py-3 sm:rounded-t-2xl">
+          <div className={`flex items-center justify-between border-b border-white/10 bg-primary-500 px-4 py-3.5 sm:py-3 ${expanded ? 'sm:rounded-t-2xl' : 'sm:rounded-t-2xl'}`}>
             <div className="flex items-center gap-2.5 text-white">
               <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20">
                 <Sparkles className="h-3.5 w-3.5" />
@@ -355,18 +357,27 @@ export function ChatWidget() {
                 <p className="text-[11px] text-white/70 leading-tight">RAG-powered · answers from study docs only</p>
               </div>
             </div>
-            <button
-              onClick={() => setOpen(false)}
-              className="flex h-8 w-8 items-center justify-center rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-            >
-              <X className="h-4.5 w-4.5" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setExpanded((v) => !v)}
+                className="hidden sm:flex h-8 w-8 items-center justify-center rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+                aria-label={expanded ? 'Collapse chat' : 'Expand chat'}
+              >
+                {expanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+              </button>
+              <button
+                onClick={() => { setOpen(false); setExpanded(false); }}
+                className="flex h-8 w-8 items-center justify-center rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <X className="h-4.5 w-4.5" />
+              </button>
+            </div>
           </div>
 
           {/* Messages */}
           <div
             ref={scrollContainerRef}
-            className="flex-1 overflow-y-auto px-4 py-4 space-y-4"
+            className={`flex-1 overflow-y-auto py-4 space-y-4 ${expanded ? 'px-6 sm:px-8 mx-auto w-full max-w-3xl' : 'px-4'}`}
             style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}
           >
             {messages.map((msg, i) => (
@@ -383,7 +394,7 @@ export function ChatWidget() {
                 )}
                 <div className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div
-                    className={`max-w-[88%] rounded-2xl px-4 py-3 ${
+                    className={`${expanded ? 'max-w-[70%]' : 'max-w-[88%]'} rounded-2xl px-4 py-3 ${
                       msg.role === 'user'
                         ? 'bg-primary-500 text-white [&_strong]:text-white [&_code]:bg-white/20 [&_code]:text-white'
                         : 'bg-[var(--bg-muted)] text-[var(--text-default)]'
@@ -427,7 +438,7 @@ export function ChatWidget() {
           )}
 
           {/* Input */}
-          <div className="border-t border-[var(--border)] p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <div className={`border-t border-[var(--border)] p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] ${expanded ? 'mx-auto w-full max-w-3xl' : ''}`}>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
