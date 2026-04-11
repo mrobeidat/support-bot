@@ -158,6 +158,51 @@ body {
   margin-top: 0;
 }
 
+/* Ask AI button on heading hover */
+.ask-ai-mount {
+  display: inline;
+}
+
+.ask-ai-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--text-dimmed);
+  background: var(--bg-muted);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.15s, transform 0.15s, color 0.15s, border-color 0.15s;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.docs-content h2:hover .ask-ai-btn,
+.docs-content h3:hover .ask-ai-btn {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.ask-ai-btn:hover {
+  color: oklch(69.6% 0.17 162.48);
+  border-color: oklch(69.6% 0.17 162.48 / 0.3);
+  background: oklch(69.6% 0.17 162.48 / 0.08);
+}
+
+@media (max-width: 640px) {
+  .ask-ai-btn {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* CSS Keyframe animations (work without JS, unlike framer-motion) */
 @keyframes fade-in-up {
   from {

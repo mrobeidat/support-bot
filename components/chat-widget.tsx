@@ -176,6 +176,33 @@ export function ChatWidget() {
     if (open) setTimeout(() => inputRef.current?.focus(), 100);
   }, [open]);
 
+  // Listen for "Ask AI" events from doc headings
+  const pendingQuestion = useRef<string | null>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const question = (e as CustomEvent).detail?.question;
+      if (!question) return;
+      pendingQuestion.current = question;
+      setOpen(true);
+    };
+    window.addEventListener('ask-ai', handler);
+    return () => window.removeEventListener('ask-ai', handler);
+  }, []);
+
+  // When chat opens with a pending question, send it
+  useEffect(() => {
+    if (open && pendingQuestion.current && !loading) {
+      const q = pendingQuestion.current;
+      pendingQuestion.current = null;
+      setInput(q);
+      // Trigger send on next tick after input is set
+      setTimeout(() => {
+        inputRef.current?.form?.requestSubmit();
+      }, 50);
+    }
+  }, [open, loading]);
+
   const sendMessage = async () => {
     const text = input.trim();
     if (!text || loading) return;

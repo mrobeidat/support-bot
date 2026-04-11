@@ -3,6 +3,7 @@ import { getDocPage, getAllSlugs } from '@/content';
 import { findNavItem, getPrevNext } from '@/lib/navigation';
 import { ClientToc } from './client-toc';
 import { PrevNext } from '@/components/prev-next';
+import { AskAiEnhancer } from '@/components/ask-ai';
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug: slug.split('/') }));
@@ -37,7 +38,9 @@ export default async function DocPage({ params }: { params: Promise<{ slug: stri
 
         <hr />
 
-        <Content />
+        <AskAiEnhancer>
+          <Content />
+        </AskAiEnhancer>
 
         <PrevNext prev={prev} next={next} />
       </article>
