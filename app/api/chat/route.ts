@@ -58,7 +58,8 @@ const SECTION_ANCHOR_MAP: Record<string, string> = {
   'system-prompts::Anatomy of a Good System Prompt': 'anatomy-of-a-system-prompt',
   'system-prompts::Prompt Engineering Techniques': 'prompt-engineering',
   'system-prompts::System Prompt for Customer Support Agents': 'anatomy-of-a-system-prompt',
-  'system-prompts::Testing and Iterating Prompts': 'testing-and-iterating',
+  'system-prompts::Testing and Iterating Prompts': 'testing-iterating',
+  'system-prompts::System Prompt vs RAG: What Goes Where?': 'system-prompt-vs-rag',
   'system-prompts::What to Say in the Interview': 'what-is-a-system-prompt',
   // interview-prep.md
   'interview-prep::About the Role': 'about-the-role',

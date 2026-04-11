@@ -218,6 +218,69 @@ the team will be available at 9am EST tomorrow.\`;
           use.
         </p>
       </Callout>
+
+      <h2 id="system-prompt-vs-rag">System Prompt vs RAG: What Goes Where?</h2>
+      <p>
+        This is a key distinction you&apos;ll likely be asked about. The system prompt and
+        RAG serve different purposes and putting the wrong content in the wrong place hurts
+        performance, cost, and accuracy.
+      </p>
+
+      <h3 id="system-prompt-static">System Prompt = Behavior Rules (Static)</h3>
+      <p>Things that <strong>never change</strong> between conversations:</p>
+      <ul>
+        <li>Who the agent is (role, company, tone)</li>
+        <li>How it should behave (be concise, be empathetic, escalate when X)</li>
+        <li>What tools to use and when</li>
+        <li>Guardrails (don&apos;t discuss competitors, don&apos;t promise refunds)</li>
+        <li>Output format (use bullet points, keep it short)</li>
+      </ul>
+      <p>Think of it as the agent&apos;s <strong>personality and rules</strong>. Same for every customer.</p>
+
+      <h3 id="rag-dynamic">RAG = Factual Content (Dynamic)</h3>
+      <p>Things that <strong>change over time</strong> or vary per query:</p>
+      <ul>
+        <li>Product details, pricing, features</li>
+        <li>Company policies (return windows, shipping times)</li>
+        <li>How-to guides and troubleshooting steps</li>
+        <li>FAQ answers</li>
+      </ul>
+      <p>Think of it as the agent&apos;s <strong>reference library</strong>. Different chunks get pulled in depending on the question.</p>
+
+      <h3 id="why-not-everything-in-prompt">Why Not Put Everything in the System Prompt?</h3>
+      <ol>
+        <li><strong>Context window limits</strong> &mdash; You can&apos;t fit 500 help articles in the prompt. RAG retrieves only the 3&ndash;5 most relevant pieces.</li>
+        <li><strong>Freshness</strong> &mdash; Updating the system prompt requires redeployment. RAG pulls from a knowledge base that can update in real-time.</li>
+        <li><strong>Relevance</strong> &mdash; The system prompt is sent with every request (wastes tokens on irrelevant info). RAG only injects what&apos;s needed.</li>
+        <li><strong>Cost</strong> &mdash; Every token in the system prompt costs money on every API call. RAG keeps the prompt lean.</li>
+      </ol>
+
+      <Callout type="tip" title="The Golden Rule">
+        <p>
+          <strong>System prompt</strong> = HOW the agent behaves (instructions, rules, personality)<br />
+          <strong>RAG</strong> = WHAT the agent knows (facts, policies, product info)
+        </p>
+      </Callout>
+
+      <h3 id="when-they-overlap">When They Overlap</h3>
+      <p>
+        Sometimes you put a brief summary in the system prompt AND the full detail in RAG:
+      </p>
+      <ul>
+        <li><strong>System prompt:</strong> &quot;We offer 30-day returns. For details, always search the KB.&quot;</li>
+        <li><strong>RAG:</strong> Full return policy with conditions, exceptions, process steps.</li>
+      </ul>
+      <p>
+        This gives the agent a quick reference for simple questions while ensuring accuracy
+        for complex ones.
+      </p>
+
+      <Callout type="info" title="Interview Example">
+        <p>
+          <strong>Bad:</strong> Putting your entire return policy in the system prompt (wastes tokens on every non-return question).<br />
+          <strong>Good:</strong> System prompt says &quot;Use the search tool for policy questions.&quot; RAG returns the specific return policy section when asked.
+        </p>
+      </Callout>
     </>
   );
 }
@@ -236,6 +299,9 @@ export const systemPromptsPages = {
       { id: 'negative-instructions', title: 'Negative Instructions', level: 3 },
       { id: 'dynamic-context', title: 'Dynamic Context Injection', level: 3 },
       { id: 'testing-iterating', title: 'Testing and Iterating Prompts', level: 2 },
+      { id: 'system-prompt-vs-rag', title: 'System Prompt vs RAG', level: 2 },
+      { id: 'why-not-everything-in-prompt', title: 'Why Not Everything in Prompt?', level: 3 },
+      { id: 'when-they-overlap', title: 'When They Overlap', level: 3 },
     ],
     content: SystemPromptsContent,
   },

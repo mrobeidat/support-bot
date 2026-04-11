@@ -132,6 +132,50 @@ Treat system prompts like code:
 - Roll back if a new version performs worse
 - Test with a set of representative customer queries before deploying
 
+## System Prompt vs RAG: What Goes Where?
+
+This is a common interview question: "When do you put information in the system prompt vs in the RAG knowledge base?"
+
+### System Prompt (Static Instructions)
+The system prompt is for **behavior rules** — things that never change between conversations:
+- Who the agent is (role, company, tone)
+- How it should behave (be concise, be empathetic, escalate when X)
+- What tools to use and when
+- Guardrails (don't discuss competitors, don't promise refunds)
+- Output format (use bullet points, keep it short)
+
+Think of it as the agent's **personality and rules**. It's the same for every customer.
+
+### RAG Knowledge Base (Dynamic Content)
+RAG is for **factual information** — things that change over time or vary per query:
+- Product details, pricing, features
+- Company policies (return windows, shipping times)
+- How-to guides and troubleshooting steps
+- FAQ answers
+
+Think of it as the agent's **reference library**. Different chunks get pulled in depending on what the customer asks.
+
+### Why Not Put Everything in the System Prompt?
+1. **Context window limits** — You can't fit 500 help articles in the prompt. RAG retrieves only the 3-5 most relevant pieces.
+2. **Freshness** — Updating the system prompt requires redeployment. RAG can pull from a knowledge base that updates in real-time.
+3. **Relevance** — The system prompt is sent with every request (wastes tokens on irrelevant info). RAG only injects what's needed for the specific question.
+4. **Cost** — Every token in the system prompt costs money on every API call. RAG keeps the prompt lean.
+
+### The Golden Rule
+- **System prompt** = HOW the agent behaves (instructions, rules, personality)
+- **RAG** = WHAT the agent knows (facts, policies, product info)
+
+### Example
+Bad: Putting your entire return policy in the system prompt (wastes tokens on every non-return question)
+Good: System prompt says "Use the search tool for policy questions." RAG returns the specific return policy section when a customer asks about returns.
+
+### When They Overlap
+Sometimes you put a brief summary in the system prompt AND the full detail in RAG:
+- System prompt: "We offer 30-day returns. For details, always search the KB."
+- RAG: Full return policy with conditions, exceptions, process steps
+
+This gives the agent a quick reference for simple questions while ensuring accuracy for complex ones.
+
 ## What to Say in the Interview
 
 When asked about system prompts / prompt engineering:
